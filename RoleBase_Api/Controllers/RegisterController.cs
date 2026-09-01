@@ -24,8 +24,8 @@ namespace RoleBase_Api.Controllers
         public IActionResult GetUsers()
         {
             var users = _userRepository.GetUsers()
-                              .Where(u => u.Role.Name != "Admin")
-                              .ToList();
+                     .Where(u => !string.Equals( u.Role.Name,"Admin",StringComparison.OrdinalIgnoreCase))
+                     .ToList();
             var userDTOs = _mapper.Map<List<UserDTO>>(users);
             return Ok(userDTOs);
         }

@@ -88,7 +88,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowFrontend", policy =>
     {
         policy
-            .WithOrigins("https://monumental-macaron-b83248.netlify.app")
+            .WithOrigins("https://deft-gelato-2bdf36.netlify.app")
             .AllowAnyHeader()
             .AllowAnyMethod();
     });

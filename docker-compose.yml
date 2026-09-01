@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  rolebase-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: rolebase-api
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_URLS=http://+:8080
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__DefaultConnection=Server=mssql;Database=RoleBase_Api;User Id=sa;Password=YourPassword123;TrustServerCertificate=True;MultipleActiveResultSets=true
+      - Appsettings__Secret=your-jwt-secret-key-here
+      - TwilioSettings__AccountSid=your-twilio-account-sid
+      - TwilioSettings__AuthToken=your-twilio-auth-token
+      - TwilioSettings__PhoneNumber=+1xxxxxxxxxx
+    depends_on:
+      - mssql
+    networks:
+      - rolebase-network
+
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: rolebase-mssql
+    environment:
+      - SA_PASSWORD=YourPassword123
+      - ACCEPT_EULA=Y
+    ports:
+      - "1433:1433"
+    volumes:
+      - mssql-data:/var/opt/mssql
+    networks:
+      - rolebase-network
+
+volumes:
+  mssql-data:
+
+networks:
+  rolebase-network:
+    driver: bridge

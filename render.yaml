@@ -1,0 +1,38 @@
+services:
+  - type: web
+    name: rolebase-api
+    env: docker
+    repo: https://github.com/jass0034/RoleBase_Api.git
+    branch: master
+    plan: free
+
+    # Environment Variables
+    envVars:
+      - key: ASPNETCORE_URLS
+        value: http://+:8080
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: PORT
+        value: 8080
+
+      # Database Connection - Update with your database details
+      - key: ConnectionStrings__DefaultConnection
+        value: Server=YOUR_DATABASE_SERVER;Database=RoleBase_Api;User Id=YOUR_USER;Password=YOUR_PASSWORD;TrustServerCertificate=True;MultipleActiveResultSets=true
+
+      # JWT Settings
+      - key: Appsettings__Secret
+        sync: false  # Set to false to use a secret value
+
+      # Twilio Settings (Optional)
+      - key: TwilioSettings__AccountSid
+        sync: false
+      - key: TwilioSettings__AuthToken
+        sync: false
+      - key: TwilioSettings__PhoneNumber
+        value: "+1xxxxxxxxxx"
+
+    # Health Check
+    healthCheckPath: /swagger
+
+    # Build Command
+    buildCommand: dotnet restore && dotnet publish -c Release

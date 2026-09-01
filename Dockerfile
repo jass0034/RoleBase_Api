@@ -17,11 +17,15 @@ RUN dotnet publish "RoleBase_Api.csproj" -c Release -o /app/publish
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
 WORKDIR /app
 
+# Install necessary packages for file watching
+RUN apt-get update && apt-get install -y inotify-tools && rm -rf /var/lib/apt/lists/*
+
 COPY --from=publish /app/publish .
 
 EXPOSE 8080
 
 ENV ASPNETCORE_URLS=http://+:8080
 ENV ASPNETCORE_ENVIRONMENT=Production
+ENV DOTNET_USE_POLLING_FILE_WATCHER=true
 
 ENTRYPOINT ["dotnet", "RoleBase_Api.dll"]

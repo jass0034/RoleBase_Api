@@ -11,6 +11,12 @@ using System.Security.Claims;
 using System.Text;
 using System.Text.Json.Serialization;
 
+// Disable file watching in production to prevent inotify exhaustion
+if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
+{
+    Environment.SetEnvironmentVariable("DOTNET_USE_POLLING_FILE_WATCHER", "true");
+}
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.

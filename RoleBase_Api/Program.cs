@@ -72,16 +72,26 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     };
 });
 
-// cors
+//// cors
+//builder.Services.AddCors(options =>
+//{
+//    options.AddPolicy("MyPolicy",
+//        policy =>
+//        {
+//            policy.WithOrigins("http://monumental-macaron-b83248.netlify.app") 
+//                  .AllowAnyHeader()
+//                  .AllowAnyMethod();
+//        });
+//});
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("MyPolicy",
-        policy =>
-        {
-            policy.WithOrigins("http://monumental-macaron-b83248.netlify.app") 
-                  .AllowAnyHeader()
-                  .AllowAnyMethod();
-        });
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy
+            .WithOrigins("https://monumental-macaron-b83248.netlify.app")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
 });
 
 builder.Services.AddAuthorization();
@@ -99,7 +109,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseCors("MyPolicy");
+app.UseCors("AllowFrontend");
 
 app.UseAuthentication();
 app.UseAuthorization();

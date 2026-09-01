@@ -31,6 +31,28 @@ namespace RoleBase_Api.Controllers
             return Ok(rolesDTO);
         }
 
+        /// <summary>
+        /// Diagnostic endpoint to check database connection
+        /// </summary>
+        [HttpGet("diagnostic")]
+        public IActionResult GetDiagnostic()
+        {
+            try
+            {
+                var allRoles = _roleRepository.GetRoles();
+                return Ok(new 
+                { 
+                    status = "Connected",
+                    totalRoles = allRoles.Count,
+                    roles = allRoles.Select(r => new { r.Id, r.Name }).ToList()
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { status = "Error", message = ex.Message });
+            }
+        }
+
         [Authorize(Roles = "Admin")]
         [HttpGet("{roleId:int}")]
         public IActionResult GetRole(int roleId)

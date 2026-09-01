@@ -27,7 +27,8 @@ namespace RoleBase_Api.Repository
 
         public bool Save()
         {
-            return _context.SaveChanges() == 1 ? true : false;
+            var result = _context.SaveChanges();
+            return result > 0;
         }
 
         bool IRoleRepository.DeleteRole(Role role)
